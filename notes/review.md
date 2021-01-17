@@ -72,11 +72,77 @@
         Expanding the recursive terms,  
                 $v_t = (1-\beta)\theta + \beta (\sum_{n=1,t=t}^{n=n,t=1}(1-\beta)^n\theta_{t-1} )$,
         * Because of the term $(1-\beta)^n$, at very  beginning $\theta_{0}$,$\theta_{1}$ ... are very small. Add a multiplicative term $\frac{1}{1-\beta^t}$ 
-        * 
+    
+    * Momentum:
+        * SGD + Momentum is a very powerful optimization.
+        * Can use exponentially moving average of gradient to reduce the oscillations in the vertical direction error and speed up the horizontal direction to converge 
+        * Compute $dw$ and $db$ on your mini-batch. And calculate the new gradient direction as:
+            <p style="text-align: center;">$v^{t}_{dw}=\beta*v^{t-1}_{dw}+(1-\beta)dw$,</p>
+            <p style="text-align: center;">$b^{t}_{db}=\beta*b^{t-1}_{db}+(1-\beta)db$,</p>
+        The new weight update is:
+            <p style="text-align: center;">$w=w-\alpha*v^{t}_{dw}$</p>,
+            </p>$b=b-\alpha*v^{t}_{db}$,</p>
+        Effectively we are averaging $\frac{1}{1-\beta}$ points 
+![momentum](/Users/qxy001/Documents/personal_src/aiml/notes/momentum.png)
+
+        * Momentum still suffers from ocilations in vertical direction 
+        
+    * RMSProp: an adaptive learning rate method 
+        * devides the learning rate by an expoentially decaying average of squared gradient
+        * $\beta$ is suggested to be 0.9 and $\alpha$ is suggested to be 0.001
+        * Each iteration the learning rate is changed to be:
+            <p style="text-align: center;">$w=w-\frac{\alpha}{\sqrt{s^{t}_{dw}+\epsilon}}*dw$,</p>
+            <p style="text-align: center;">$s^{t}_{dw}=\beta*s^{t-1}_{dw}+(1-\beta)*(dw)^2$,</p>
+        * when $dw$ is really small, $dw$ is smaller, and $\frac{\alpha}{\sqrt{s^{t}_{dw}+\epsilon}}$ is large. Vice versa
+
+    * Adam Optimization (Adaptive Moment Estimation)：
+        * momentum update:$m_{t}=\beta_{1}m_{t-1}+(1-\beta)*dg$, 
+        * RMSProp update: $v_{t}=\beta_{2}v_{t-1}+(1-\beta)*dg^2$,
+        * To prevent $m_{t}$ and $v_{t}$ from becoming zero during the initial steps, adjustment needs to be made:
+        
+          <p style="text-align: center;">$\hat{m_{t}}=\frac{m_{t}}{1-\beta_{1}^{t-1}}$,</p>
+          <p style="text-align: center;">$\hat{v_{t}}=\frac{v_{t}}{1-\beta_{2}^{t-1}}$,</p>
+        * The final update is:
+            <p style="text-align: center;">$w_{t+1}=w_{t}-\frac{\alpha}{\sqrt{\hat{v_{t}}}+\epsilon}*\hat{m_{t}}$</p>
+        exponentially averaging past gradient and adjust by exponentially averaging past gradient squared
+        * Adam optimization converges very fast 
+   
+    * Weight decaying 
+        * When adding L2 regularization to vanilla SGD:
+        
+        <p style="text-align: center;">$\tilde{E(\textbf{w})}=E(\textbf{w})+\frac{\lambda}{2}\textbf{w}^2$</p>
+
+        it is equivalent of changing the weight update rule to below:
+        <p style="text-align: center;">$w_{t+1}=w_{t}-\alpha*\frac{\partial E}{\partial w}-\alpha*\lambda*w_{t}$</p>
+        * But when adding L2 regularization to momentum and other optimization methods, the resulting weight update is not necessarily weight decaying
+        * Decoupling weight decay: adding the term $\alpha*\lambda*w_{t}$
+        
+            * Add weight decay to momentum:
+            <p style="text-align: center;">$w_{t+1}=w_{t}-\alpha*v^{t}_{dw}-\alpha*\lambda*w_{t}$</p>
+
+            * Add weight decay to Adam:
+            <p style="text-align: center;">$w_{t+1}=w_{t}-\frac{\alpha}{\sqrt{\hat{v_{t}}}+\epsilon}*\hat{m_{t}}-\alpha*\lambda*w_{t}$</p>
+
+        * Adding weight decay to Adam is as powerful as SGD with momentum
+        
+    * AMSGrad: fix for short comings of Adam:
+    
+        * in Adam short term memory of the gradients becomes an obstacle. Adam can converge to suboptimal. Although there are minibatches where the gradient calculation yields large and informative gradient, those are area and averaged out. 
+        
+        * instead of using $\hat{v_{t}}$ we use the previous one if it is larger than current:
+        <p style="text-align: center;">$\hat{v_{t}} = max(\hat{v_{t-1}},v_{t})$</p>  
+
+        * The full AMSGrad update without bias correction is:
+            <p style="text-align: center;">$m_{t}=\beta_{1}m_{t-1}+(1-\beta)*dg$,</p>
+            <p style="text-align: center;">$v_{t}=\beta_{2}v_{t-1}+(1-\beta)*dg^2$,</p>
+            <p style="text-align: center;">$\hat{v_{t}} = max(\hat{v_{t-1}},v_{t})$</p> 
+            <p style="text-align: center;">$w_{t+1}=w_{t}-\frac{\alpha}{\sqrt{\hat{v_{t}}}+\epsilon}*m_{t}$</p>
+        * It is debatable whether AMSGrad consistently outperforms Adam across data sets 
+        
+    * Hyper parameter tuning and learning rate schedule: choose the set of hyper parameters to optimize the validation set metrics  
 
 
-
-
+    
 
 
 
