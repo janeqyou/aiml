@@ -20,7 +20,7 @@
         - maximize the difference between points in negative pairs and minimize distance between points in positive pairs
     * Hinge loss: $max(0,1-y*\tilde{y})$
         - consider the following plot of $1-x$ and $max(0,1-x)$. Negative values of $1-x$ are suppressed. Value of $max(0,1-x)$ is linear/proportional to $1-x$ when $1-x > 0$ 
-        ![Hinge-loss](hinge-loss.png){width="600" height="300"}
+            ![Hinge-loss](/Users/qxy001/Documents/personal_src/aiml/notes/hinge-loss.png)
 
     * Triple Ranking Loss: $max(|f_a-f_p|^2-|f_a-f_n|^2+m)$. Minimize distance between positive samples and anchors and maximize distance between negative samples and anchor. m is margin, negative samples distance towards anchor needs to be larger than positive samples distance towards anchor. 
         - Easy triplets need to be avoid. 
