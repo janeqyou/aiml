@@ -139,8 +139,75 @@
             <p style="text-align: center;">$w_{t+1}=w_{t}-\frac{\alpha}{\sqrt{\hat{v_{t}}}+\epsilon}*m_{t}$</p>
         * It is debatable whether AMSGrad consistently outperforms Adam across data sets 
         
-    * Hyper parameter tuning and learning rate schedule: choose the set of hyper parameters to optimize the validation set metrics  
+* Section 4 Hyper parameter tuning and learning rate schedule: choose the set of hyper parameters to optimize the validation set metrics 
+        *  learning rate too small, very slow ; too big, never learn
+    ![learning-rate](/Users/qxy001/Documents/personal_src/aiml/notes/learning_rate.png). Good learning rate (0.01, 0.001, $10e^{-4}$)
+        * Step decay: decay every n epoch, with decay factor:
+        <code>
+        <p style="text-align: center;">$decay factor=decay rate^{fraction}$</p>
+        <p style="text-align: center;">$fraction = (current_epoch-start_decy_epoch//n)$</p>
+        <p style="text-align: center;">$/alpha = decay factor$</p>
+        </code>>
+        * learning rate and batch size:
+            - when using larger batch, means gradient calculation has less noise more confident. Therefore the learning rate can be big. $\sqrt{k}$
+ 
+* Section 5 weight initialization 
+    * Zero weights intialization: 
+        * <code>w[l]=np.zeros(layer_size[l], layer_size[l-1])</code>
+        * no learning 
+    * Same value initialization: 
+        * Every neuron is updated the same. Symmetry breaking problem 
+    * Normal Initilization: helps to break the symmetry 
+        * <code>w[l]=np.random.randn(layer_size[l], layer_size[l-1])*0.01</code>
+        * <code>np.random.randn(d0,d1,d2..) returns a sample from standard normal distribution with dimension[d0,d1,d2...]</code>
+    * Xavier Initialization: 
+        * keep variance among layers constant: $Var(w[l])=Var(w[l-1])$
+        * <code>w[l]=np.random.randn(layer_size[l], layer_size[l-1])*np.sqrt(1/layer_size[l-1])</code>
 
+* Regularization and normalization 
+    * How to reduce overfitting:
+        - train using more data 
+        - data augmentation 
+        - use early stopping, when validation error starts to increase 
+    
+    * Regularization:
+        - L1 regularization. Loss function: $\sum_{i=1}^{n}(y_{i}-\sum_{j=1}^{p}x_{ij}w_{j})^2+\lambda\sum_{j=1}^{p}|w_{j}|$ 
+        - L2 regularization. Loss function: $\sum_{i=1}^{n}(y_{i}-\sum_{j=1}^{p}x_{ij}w_{j})^2+\lambda\sum_{j=1}^{p}(w_{j})^2$ 
+    
+    * Dropout:
+        - during training, values of neurons tend to heavily dependently on eac other. (Or simply because the parameters are too much ) The model might just memorize the nuances in the train data set resulted in overfiting. 
+        - dropout forces neuros to learn independent and robust features that are useful in conjunction to many random substates of the other neurons. 
+        - In the training phase, for a specific hidden layer, for each training sample, for each iteration, **randomly disable a fraction, p, of neuros and its activations**. In testing phase, do the inference without drop out. 
+    * DropConnect: Weight dropout 
+        - instead of deactivating neurons, set the weights to be zero 
+
+    * Normalization and standarization
+        - (similar as linear regression and logistic regression) Without normalization, large values will dominate the data sets and small values are meaningless. Gradient exploding can happen as well. 
+        
+        - min-max normalization. standarization to put input: $X~N(0,std)$
+    * Batch normalization:
+        - In addition to normalize/standarize input data set around its mean and std, also normalize the output of neurons in each hidden layer across a mini batch of data
+        - Suppose the minibatch input has three samples, $x_1$,$x_2$,$x_3$. For a hidden neuron $z_{i}^{j}$ in jth layer, it will be activated three times $\sigma(z_{i1}^{j})$, $\sigma(z_{i2}^{j})$,$\sigma(z_{i3}^{j})$. Normalize those three values. So no dominating large value neurons in the network. Formally, if a mini batch has m samples, the mean of ${\sigma(z_{ik}^{j})}_{k=1}^{m}$ is:
+            <p style="text-align: center;">$u_B=\frac{1}{m}\sum_{k=1}^{m}\sigma(z_{ik}^{j})$</p>
+        The standard deviation of the mini batchis: 
+        <p style="text-align: center;">$\sigma_{B}=\sqrt{\sum_{k=1}^{m}(\sigma(z_{ik}^{j}-u_B)^2}$</p>
+        The new activation is:
+        <p style="text-align: center;">$\hat{\sigma(z_{ik}^{j})}=\frac{\sigma(z_{ik}^{j})-u_B}{\sigma_B}$</p>
+        The output can be scaled and shift using $\gamma$,$\beta$:
+            <p style="text-align: center;">$y_ik=\gamma\hat{\sigma(z_{i}^{j})}+\beta$</p>
+            
+        - Benefits:
+            + converge faster and reduce the need for drop out  
+            + can normalize to what ever distribution that is best for the learning
+            + eliminate the need for bias for a layer because batch normalization already shifts output by beta. $\gamma$,$\beta$ can be learnt 
+    
+    * Layer normalization: 
+        - instead of mini batch, the mean and std are calculated across m neurons in a hidden layer. 
+        - Difference vs batch normalization:
+            + In batch normalization, the input to the same neurons are normalized across different data points ( e.g. image) in a mini batch 
+            + In layer normalization, the input to the neurons of the same hidden layers are normalized, even in forward propogation of a single data point. 
+
+#### Common [Evaluation Metrics](https://cs230.stanford.edu/section/7/) in ML/DL
 
     
 
