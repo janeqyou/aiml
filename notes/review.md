@@ -208,6 +208,83 @@
             + In layer normalization, the input to the neurons of the same hidden layers are normalized, even in forward propogation of a single data point. 
 
 #### Common [Evaluation Metrics](https://cs230.stanford.edu/section/7/) in ML/DL
+* Object detection:
+    * For one object in the image, IoU = intersection area / union, larger than threshold; object class is correct. We deem positive. 
+    * Precision and Recall can be calculated from all objects in an image
+    * mAP (mean average precision) and mAR (mean average recall)
+* NLP: (TBD)
+
+#### Computer Vision 
+* Neural Network architectures 
+    -  Neural Networks are modeled as collections of neurons that are connected in an acyclic graph.Instead of an amorphous blobs of connected neurons, Neural Network models are often organized into distinct layers of neurons. For regular neural networks, the most common layer type is the *fully-connected layer*
+    -  Single-layer neural network.No hidden layers. Usually called "ANN" or "multi-layer perceptron (MLP)"
+    -  Output layer vs last layer. Output layer usually dont have activation, e.g. softmax layer 
+    
+* ConvNets:
+    - if an image is wxhxd, having so many neurons in each layer of a fully connected network will dramatically increase the parameters. 
+    - ConvNets use 3D volume inputs, every layer neurons are arranged in wxhxd 3D fashion, where d is the activation. Only a small portion of one layers neurons are connected to the previous layer.Every Layer has a simple API: It transforms an input 3D volume to an output 3D volume with some differentiable function that may or may not have parameters.
+    
+
+
+
+* Object detection: Mask R-CNN, fast R-CNN, YoloV4  architecture
+* Fine tuning, few shot learning, meta learning - DRAGON
+* Table Detection - Harvest
+
+#### NLP
+* Stanford cs240N
+* Word2Vec/GloveEmbedding
+* BERT model (generation, summarization, Q&A) , different types of attention 
+* LayoutLM - DRAGON 
+
+#### Active Learning, HITL
+* 
+
+
+#### Neural Nets in Personalization and CLR prediction
+* imbalanced data sets 
+* Cold start 
+
+#### Cross modality 
+
+
+#### [Making decisions under uncertainty](https://docs.google.com/spreadsheets/d/1r_lTkVdEM89JUNuKbeWSULg0yMDcl_dWS_MDiG0KFm4/edit#gid=0)
+
+
+#### Knowledge Graph and Common Sense Reasoning 
+
+
+#### [Intro to Semi supervise learning](https://www.cs.ubc.ca/~schmidtm/Courses/LecturesOnML/semiSupervised.pdf)
+* common situation: 
+    - a small amount of labeled data set $(x_i,y_i)$
+    - a large amount of unlabeled data set $(x_t)$ 
+    - transductive Semi-Supervised Learning: Only interested in labels of the given unlabeled examples.
+    - Inductive Semi-Supervised Learning: Interested in the test set performance on new examples. 
+    - If unlabeled data set $(x_t)$ is totally random, nothing can be said about y. SSL is not possible 
+    - SSL is only possible when $(x_t)$ contains some information to tell about y. e.g. clusters or manifold in unlabeled data set 
+    
+* SSL Approach 1: self-taught learning:
+    - step 1. Train on labeled data set. model = fit($x_i$,$y_i$)
+    - step 2. Guess label for ${x_t}$. $\hat{y}=model.predict(x_t)$
+    - step 3. Train on bigger data set: model = fit($[x_i,x_t]^T$,$[y_i,\hat{y}]^T,\lambda$)
+    - Go back to step 2 and repeat
+    - Potential problems:
+        + step 2 and step 3 can reinforce errors or even diverge 
+        + Regularize the loss from the unlabeled examples:
+        $f(w)=\frac{1}{2}\parallel X_w-Y \parallel^2+\frac{\lambda}{2}\mid X_t-\hat{Y} \mid$,$\lambda$ controls how much loss from unlabeled data is from
+
+* SSL Approach 2: Co Training
+* SSL Approach 3: Entropy Regularization 
+* SSL Approach 4: Graph-based SSL (Label Propogation):
+    - treat unknown labels $\bar{y}$ as varaibles, and minimize cost disagreement:
+<p style="text-align: center;">$f(\bar{y})=\frac{1}{2}\sum_{i=1}^{n}\sum_{j=1}^{t}w_{ij}(y_i-\bar{y_j})^2+\frac{1}{2}\sum_{i=1}^{t}\sum_{j=1}^{t}\bar{w_{ij}}(\bar{y_i}-\bar{y_j})^2$</p>
+where $w_{ij}$ are weights between labeled and unlabeled samples, and $\bar{w_{ij}}$ are weights between unlabeled samples. Doing gradient on labels of unlabeled samples. Term $(y_i-\bar{y_j})$ makes unlabeled sample $\bar{y_j}$ similar to labeled neighbors; term $(\bar{y_i}-\bar{y_j})$ makes unlabeled sample in the same neighborhood agree each other 
+    - comments on graph based ssl:
+        + transductive method, only estimate unknown labels 
+        + surprisingly effective even if you only have a few labels 
+        + Does not need features if your features are reflective on the weighted graph 
+
+
 
     
 

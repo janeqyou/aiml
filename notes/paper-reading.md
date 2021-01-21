@@ -58,8 +58,7 @@ For i from 1 ot N: // for each data sample $\hat{x_i}$
     Finally $\frac{V(G,D)}{\hat{x_i}}=\frac{1}{2\sigma R}\sum_{r=1}^{R}D(x_{i}^{(r)})\Delta x_{i}^{(r)}$
 
 #### Practical Limitation
-- Mode collapse and gradient vanishing as mentioned [here](https://developers.google.com/machine-learning/gan/problems
-)
+- Mode collapse and gradient vanishing as mentioned [here](https://developers.google.com/machine-learning/gan/problems)
 - Use real data to intialize the generator.  For humans’ perceptual evaluation, a speech waveform
 was synthesized from the generated speech features. First, the first
 and second principal components were generated from a generator
@@ -75,7 +74,10 @@ WORLD vocoder
 ![human-gan-perceptual](/Users/qxy001/Documents/personal_src/aiml/notes/human-gan-perceptual-distribution.png)
 
 - How to generate artificial speech for human to evaluate. The generator was a small feed-forward
-neural network consisting of a two-unit input layer, 2 × 4-unit sigmoid hidden layers, and two-unit linear output layer. The model parameters were randomly initialized, but we iterated the random initialization until the initial generator output data that covered ranges of a higher posterior probability.
+neural network consisting of a two-unit input layer, 2 × 4-unit sigmoid hidden layers, and two-unit linear output layer. The model parameters were randomly initialized, but we iterated the random initialization until the initial generator output data that covered ranges of a higher posterior probability. Below figure shows generated data (white points) overlays on posterior probablitly heat map. One can see white points start out randomly and after a few itertions it concentrates on high posterior probability area, and covers more than real data 
+
+![human-gan-iterations](/Users/qxy001/Documents/personal_src/aiml/notes/human-gan-iterations.png)
+
 
 #### Resources:
 - J.-J. Zhu and J. Bento, “Generative adversarial active learning,”
