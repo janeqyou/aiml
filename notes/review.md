@@ -214,7 +214,7 @@
     * mAP (mean average precision) and mAR (mean average recall)
 * NLP: (TBD)
 
-#### Computer Vision 
+#### [Computer Vision](https://cs231n.github.io/)
 * Neural Network architectures 
     -  Neural Networks are modeled as collections of neurons that are connected in an acyclic graph.Instead of an amorphous blobs of connected neurons, Neural Network models are often organized into distinct layers of neurons. For regular neural networks, the most common layer type is the *fully-connected layer*
     -  Single-layer neural network.No hidden layers. Usually called "ANN" or "multi-layer perceptron (MLP)"
@@ -223,11 +223,57 @@
 * ConvNets:
     - if an image is wxhxd, having so many neurons in each layer of a fully connected network will dramatically increase the parameters. 
     - ConvNets use 3D volume inputs, every layer neurons are arranged in wxhxd 3D fashion, where d is the activation. Only a small portion of one layers neurons are connected to the previous layer.Every Layer has a simple API: It transforms an input 3D volume to an output 3D volume with some differentiable function that may or may not have parameters.
+![Conv-nets](/Users/qxy001/Documents/personal_src/aiml/notes/conv-nets.png)
+    - the architecture: INPUT - CONV - RELU - POOL - FC
+        + INPUT [32x32x3] will hold the raw pixel values of the image, in this case an image of width 32, height 32, and with three color channels R,G,B.
+        + CONV layer will compute the output of neurons that are connected to local regions in the input, each computing a dot product between their weights and a small region they are connected to in the input volume. This may result in volume such as [32x32x12] if we decided to use 12 filters. Depending on the convolution window size, the resulted volume can be nxnx12, n<32.
+        + RELU layer will apply an elementwise activation function, such as the max(0,x) thresholding at zero. This leaves the size of the volume unchanged ([32x32x12]).
+        + POOL layer will perform a downsampling operation along the spatial dimensions (width, height), resulting in volume such as [16x16x12].
+        + FC (i.e. fully-connected) layer will compute the class scores, resulting in volume of size [1x1x10], where each of the 10 numbers correspond to a class score, such as among the 10 categories of CIFAR-10. As with ordinary Neural Networks and as the name implies, each neuron in this layer will be connected to all the numbers in the previous volume. 
+        
+    - Convolution Layer.
+        + Accepts a volume of size W1×H1×D1
+        + Requires four hyperparameters:
+            + Number of filters K. Each one is FxFxD1 so at depth direction weight is full. K is also the output channel. 
+            + their spatial extent F, therefore there are FxFxD1xK weight parameters. 
+            + the stride S, step size. How far in pixel the convolution window moves
+            + the amount of zero padding P. So the size of local region matches the filter size 
+            + Produces a volume of size W2×H2×D2 where: W2=(W1−F+2P)/S+1; H2=(H1−F+2P)/S+1 (i.e. width and height are computed equally by symmetry); D2=K
+With parameter sharing, it *introduces F⋅F⋅D1 weights per filter*, for a total of *(F⋅F⋅D1)⋅K weights and K biases*.
+In the output volume, the d-th depth slice (of size W2×H2) is the result of performing a valid convolution of the d-th filter over the input volume with a stride of S, and then offset by d-th bias.
+    - Pooling Layer. Accepts a volume of size W1×H1×D1. Requires two hyperparameters:
+        their spatial extent F,
+        the stride S,
+    Produces a volume of size W2×H2×D2 where:
+        W2=(W1−F)/S+1
+        H2=(H1−F)/S+1
+        D2=D1
+        Introduces zero parameters since it computes a fixed function of the input. For Pooling layers, it is not common to pad the input using zero-padding.    
+    - FC layer. Neurons in a fully connected layer have full connections to all activations in the previous layer, as seen in regular Neural Networks. Their activations can hence be computed with a matrix multiplication followed by a bias offset. 
     
+    - Layper pattern:
+    <code>INPUT -> [[CONV -> RELU]*N -> POOL?]*M -> [FC -> RELU]*K -> FC </code>
+
+    - VGG: increased depth compared to AlexNet. Also included some materials from [here](https://medium.com/towards-artificial-intelligence/the-architecture-and-implementation-of-vgg-16-b050e5a5920b)
+        + similarity: small convolution filter , small stride size
+        + difference: more depth
+        + The convolutional layers in VGG use a very small receptive field (3x3, the smallest possible size that still captures left/right and up/down). There are also 1x1 convolution filters which act as a linear transformation of the input, which is followed by a ReLU unit. The small-size convolution filters allows VGG to have a large number of weight layers; of course, more layers leads to improved performance.
+        + The max pooling layer: It is performed over a max-pool window of size 2 x 2 with stride equals to 2, which means here max pool windows are non-overlapping windows.
+        + The fully connected layer. three of fully connected layers
+        + VGG has different configurations from VGG11-VGG19. See below table. layers are represented as <code>filter size-number of channel</code>. Number of channel in convolution layer is the number of filter. 
+![vgg-configuration.png]
+
+    
+    
+    - ResNet
+    - Fine tunning a CNN (or VGG/)
+
+        
+* Object detection: Mask R-CNN, fast R-CNN, faster R-CNN, YoloV4  architecture
 
 
 
-* Object detection: Mask R-CNN, fast R-CNN, YoloV4  architecture
+
 * Fine tuning, few shot learning, meta learning - DRAGON
 * Table Detection - Harvest
 
