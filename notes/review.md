@@ -261,16 +261,72 @@ In the output volume, the d-th depth slice (of size W2×H2) is the result of per
         + The max pooling layer: It is performed over a max-pool window of size 2 x 2 with stride equals to 2, which means here max pool windows are non-overlapping windows.
         + The fully connected layer. three of fully connected layers
         + VGG has different configurations from VGG11-VGG19. See below table. layers are represented as <code>filter size-number of channel</code>. Number of channel in convolution layer is the number of filter. 
-![vgg-configuration.png]
+        ![vgg-configuration.png](/Users/qxy001/Documents/personal_src/aiml/notes/vgg-configuration.png)
 
+    - VGG-16. above table configuration c, 13 convolution layers + 3 fc. See below graph. 
+![vgg-16.png](/Users/qxy001/Documents/personal_src/aiml/notes/vgg-16-visualization.png)
+        + 2 continous block of 2 layers of convnets, plus three block of 3 layers of convnets, max pooling serving as down sampling between blocks. Size of wxh decreases and channel number increases. 
     
+    - ResNet: 
+        + movtivation is with increased number of layers in deep nets, training error tends to increase. This is called the degradation problem. With the network depth increasing the accuracy saturates(the networks learns everything before reaching the final layer) and then begins to *degrade* rapidly if more layers are introduced. Suppose a deep net with n layers learns all the transformation, the accuracy saturates. Adding another m layers do not add any more value, and the optimal mapping the m layers can learn is identity mapping. Anything else learnt can be detrimental to the results. 
+        + Fix of degradaption. Instead of learning a mapping H(x),  learning F(x)=H(x)-x and add a direction flow of x to the output of the mapping. H(x)=F(x)+x
+![residual-block.png](/Users/qxy001/Documents/personal_src/aiml/notes/residual-block.png)
     
-    - ResNet
-    - Fine tunning a CNN (or VGG/)
+        If the optimal solution is the identity function, it is easier to push F(x) to be zero. If additional layers were useful, even with the presence of regularisation, the weights or kernels of the layers will be non-zero and model performance could increase slightly.
+        + *Skip layer*: The approach of adding a shortcut or a skip connection that allows information to flow, well just say, more easily from one layer to the next’s next layer, i.e., you bypass data along with normal CNN flow from one layer to the next layer after the immediate next.
+        + Two residual blocks: 
+            * identity block: when the input activation is at same dimension of output activation:
+            ![resnet-identity-block](/Users/qxy001/Documents/personal_src/aiml/notes/resnet-identity-block.png)
+            
+            * Convolution block: when the input activation is with different dimension of output activation: 
+            ![resnet-conv-block](/Users/qxy001/Documents/personal_src/aiml/notes/resnet-conv-block.png)
 
+
+        + Success of ResNet:
+            * Won 1st place in the ILSVRC 2015 classification competition with top-5 error rate of 3.57% (An ensemble model)
+            * Won the 1st place in ILSVRC and COCO 2015 competition in ImageNet Detection, ImageNet localization, Coco detection and Coco segmentation.
+            * Replacing VGG-16 layers in Faster R-CNN with ResNet-101. They observed a relative improvements of 28%
         
-* Object detection: Mask R-CNN, fast R-CNN, faster R-CNN, YoloV4  architecture
+        Using VGG architecture plain 34 layers, training error is higher than 18 layers. But if using ResNet, 34 layers still show a decrease in training error than 18 layers 
+        ![resnet-18-34-compare](/Users/qxy001/Documents/personal_src/aiml/notes/resnet-18-34-compare.png) 
+    
+    - Fine tunning a CNN:
+        + using CNN as a feature extractor. Use the FC ReLud value before the last classification layer. 
+        + using new data sets to continue back propogation. It is possible to fine-tune all the layers of the ConvNet, or it’s possible to keep some of the earlier layers fixed (due to overfitting concerns) and only fine-tune some higher-level portion of the network. This is motivated by the observation that the earlier features of a ConvNet contain more generic features (e.g. edge detectors or color blob detectors) that should be useful to many tasks, but later layers of the ConvNet becomes progressively more specific to the details of the classes contained in the original dataset. 
+        
+        + Pretrained model. Morden deep CNN models took 2-3 weeks to train, it is common for people to release check points of trained weights for other to continue
+        + Strategies:
+            * *New data set is large and very similar to the original data set*. Since we have more data, we can have more confidence that we won’t overfit if we were to try to fine-tune through the full network.
+            * *New data set is small and very similar to the original data set* Keep doing back propogation may be overfitting. Extract higher level of features produced by CNN to train classifier. 
+            
+            * New data set is large and different to the original data set 
+            It is very often still beneficial to initialize with weights from a pretrained model. In this case, we would have enough data and confidence to fine-tune through the entire network.
 
+            * New data set is small and different to the original data set.it might work better to train the SVM classifier from activations somewhere earlier in the network. 
+
+* Object detection - some prep work 
+    - Image gradient vector:
+        + If an image can be represented as a function of pixels arranged in a 2D grids, $f(x,y)$. Its point-wise gradient can be calculated as:
+        
+             <p style="text-align: center;">$\begin{bmatrix}\textbf{g_x}\\\textbf{g_y}\end{bmatrix}=\begin{bmatrix} f(x+1,y)-f(x-1,y)\\ f(x,y+1)-f(x,y-1) \end{bmatrix}$</p>
+
+        It is expensive to calculate gradient this way for every pixel. A bi directional convolution filter can achieve the same thing i.e.
+            <p style="text-align: center;">$G_{x}=[-1,0,1]*[x-1,x,x+1]$,$G_{y}=[-1,0,1]*[y-1,y,y+1]$</p>
+        + Magnitue of the gradients: $\sqrt{(g_x)^2+(g_y)^2}$
+        + Direction of the gradients: $arctan(\frac{g_x}{g_y})$
+
+    - Histogram of Gradient (HOG):
+        + Preprocessing the image, substracting mean and divide the std
+        + Calculate gradient at each (x,y)
+        + Divide the image into 8x8 cells. 
+      
+    - Image Segmentation:
+
+
+
+
+* 
+Mask R-CNN, fast R-CNN, faster R-CNN, YoloV4  architecture
 
 
 
@@ -280,12 +336,12 @@ In the output volume, the d-th depth slice (of size W2×H2) is the result of per
 #### NLP
 * Stanford cs240N
 * Word2Vec/GloveEmbedding
+* Transformer Stack
 * BERT model (generation, summarization, Q&A) , different types of attention 
 * LayoutLM - DRAGON 
 
-#### Active Learning, HITL
+#### Active Learning, Semi supervised learning, HITL
 * 
-
 
 #### Neural Nets in Personalization and CLR prediction
 * imbalanced data sets 
@@ -299,6 +355,9 @@ In the output volume, the d-th depth slice (of size W2×H2) is the result of per
 
 #### Knowledge Graph and Common Sense Reasoning 
 
+#### Other adavanced topic:
+[Reasoning in AI](https://towardsdatascience.com/what-is-reasoning-526103fd217)
+* https://papers.nips.cc/paper/2019/file/9c19a2aa1d84e04b0bd4bc888792bd1e-Paper.pdf
 
 #### [Intro to Semi supervise learning](https://www.cs.ubc.ca/~schmidtm/Courses/LecturesOnML/semiSupervised.pdf)
 * common situation: 
