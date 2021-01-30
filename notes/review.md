@@ -318,15 +318,8 @@ In the output volume, the d-th depth slice (of size W2×H2) is the result of per
     - Histogram of Gradient (HOG):
         + Preprocessing the image, substracting mean and divide the std
         + Calculate gradient at each (x,y)
-        + Divide the image into 8x8 cells. 
-      
-    - Image Segmentation:
-
-
-
-
-* 
-Mask R-CNN, fast R-CNN, faster R-CNN, YoloV4  architecture
+        + Divide the image into 8x8 cells.
+* Mask R-CNN, fast R-CNN, faster R-CNN, YoloV4 ()
 
 
 
