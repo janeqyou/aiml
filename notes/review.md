@@ -322,15 +322,15 @@ In the output volume, the d-th depth slice (of size W2×H2) is the result of per
 * Mask R-CNN, fast R-CNN, faster R-CNN, YoloV4 ()
 
 
-
 * Fine tuning, few shot learning, meta learning - DRAGON
+
 * Table Detection - Harvest
 
 #### NLP
 * Stanford cs240N
 * Word2Vec/GloveEmbedding
 * Transformer Stack
-* BERT model (generation, summarization, Q&A) , different types of attention 
+* BERT model (generation, summarization, Q&A), different types of attention 
 * LayoutLM - DRAGON 
 
 #### Active Learning, Semi supervised learning, HITL
@@ -339,6 +339,7 @@ In the output volume, the d-th depth slice (of size W2×H2) is the result of per
 #### Neural Nets in Personalization and CLR prediction
 * imbalanced data sets 
 * Cold start 
+* 
 
 #### Cross modality 
 

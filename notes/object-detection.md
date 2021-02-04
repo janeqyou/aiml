@@ -63,4 +63,19 @@
     ![Faster R-CNN](/Users/qxy001/Documents/personal_src/aiml/notes/Faster-RCNN-RPN.png)
     In the above image, feature map is convolution layer output which is shared by RPN and later fast R-CNN. RPN is used to initialize Fast R-CNN. And in turn fine tuned fast R-CNN can re initialize RPN to be trained again 
 
-    
+- Mask R-CNN. Extends Faster R-CNN to pixel-level image segmentation. 
+        + The key point is to decouple the classification and the pixel-level mask prediction tasks. 
+        + it added a third branch for predicting an object mask in parallel with the existing branches for classification and localization. The mask branch is a small fully-connected network applied to each RoI, predicting a segmentation mask in a pixel-to-pixel manner.
+        + Because pixel-level segmentation requires much more fine-grained alignment than bounding boxes, mask R-CNN improves the RoI pooling layer (named “RoIAlign layer”) so that RoI can be better and more precisely mapped to the regions of the original image.
+
+- You only look once (YOLO)
+    + two stage object detector vs one stage object detector. Most of R-CNN family of object detectors are two stage detectors i.e. proposing regions first then training a CNN classifier or bounding box regressor. An alternative approach is to skip the region proposal stage and runs detection directly over a dense sampling of possible locations. This is faster and simpler, but might potentially drag down the performance a bit.
+    + Yolo does not go through the regional proposal stage. It only predicts a limited number of bounding boxes. Workflow as follow:
+        * Pre-train a CNN network on image classification task.
+        * Split an image into S×S cells. If an object’s center falls into a cell, that cell is “responsible” for detecting the existence of that object. Each cell predicts:
+            * the location of B bounding boxes within the area covered by the cell, $(x,y,w,h)$. When the cell is 'responsible' for an object, this set of coordinates positions will be penalized if they are off compared to ground truth bounding boxes ; if the cell is not 'responsible', then their prediction of bounding box positions are unconstrained. 
+            * a confidence score, 
+            * a probability of object class conditioned on the existence of an object in the bounding box.
+            -  
+
+
