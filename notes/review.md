@@ -206,6 +206,18 @@
         - Difference vs batch normalization:
             + In batch normalization, the input to the same neurons are normalized across different data points ( e.g. image) in a mini batch 
             + In layer normalization, the input to the neurons of the same hidden layers are normalized, even in forward propogation of a single data point. 
+    
+- [Some other perspectives on neural networks](http://web.stanford.edu/class/cs224n/slides/cs224n-2021-lecture05-rnnlm.pdf) 
+    + Drop out: 
+        + This prevents feature co-adaptation: A feature cannot only be useful in the presence of particular other features
+        + In a single layer: A kind of middle-ground between Naïve Bayes (where all feature weights are set independently) and logistic regression models (where weights are set in the context of all others)
+        + Can be thought of as a form of model bagging (i.e., like an ensemble model)
+        + Nowadays usually thought of as strong, feature-dependent regularizer 
+    + “Vectorization”
+        * <code>timeit [W.dot(wordvectors_list[i]) for i in range(N)]</code>
+        * <code>timeit W.dot(wordvectors_one_matrix)</code>. Much faster, especially implement in GPUs 
+    + ![Activation](/Users/qxy001/Documents/personal_src/aiml/notes/activations-2.png)
+    + 
 
 #### Common [Evaluation Metrics](https://cs230.stanford.edu/section/7/) in ML/DL
 * Object detection:
@@ -320,8 +332,6 @@ In the output volume, the d-th depth slice (of size W2×H2) is the result of per
         + Divide the image into 8x8 cells.
     
 * [Mask R-CNN, fast R-CNN, faster R-CNN, Yolo and beyond](/Users/qxy001/Documents/personal_src/aiml/notes/object-detection.md) 
-
-
 
 * Fine tuning, few shot learning, meta learning - DRAGON
 
