@@ -42,6 +42,18 @@ that appear nearby (within a fixed-size window).
         <p style="text-align: center;">$J(\theta)=-\sum_{t=1}^{T}J^{(t)}(\theta)=\frac{1}{T}\sum_{t=1}^{T} -\log\hat{y}_{x_{(t+1)}}$</p>
         * computing loss and gradient across $x^{(1)},x^{(2)},...,x^{(t)}$ is too expensive, calculate loss for batches of sentences instead 
         * Back propogation over time: $\frac{\partial J^{(t)}}{\partial W_h}=\sum_{i=1}^{t}\frac{\partial J^{(t)}}{\partial W_h}|_{i}$
+        * Evaluation of language model, perplexity i.e. exponential value of the cross entropy loss $J(\theta)$: $exp(J(\theta))$. the lower the better. 
+    + RNN can also be used as sentence encoding module. 
+        * In the sentiment classification task, the final hidden state can be used as sentence encoding
+        * Or the element-wise max or mean of all hidden states can be the the input sentence encoding module 
+    + Vanishing Gradient
+![vanishing gradient](/Users/qxy001/Documents/personal_src/aiml/notes/vanishing-gradient-intuition.png)
+    
+Mathematically, the gradient of loss $J^{(i)}(\theta)$ on step $i$, with respect to the hidden state $h^{(j)}$ at some previous step, $i>j$, $l=i-j$
+is: 
+<p style="text-align: center;">$\frac{\partial J^{(i)}{(\theta)}}{\partial h^{(j)}}=\frac{\partial J^{(i)}{(\theta)}}{\partial h^{(i)}}\prod_{(j<t<i)}W_t=\frac{\partial J^{(i)}{(\theta)}}{\partial h^{(i)}}W^{l}$</p>
+When $W^l$ is really small, this term almost becomes zero, gradient vanishes. loss at step $i$ can not influence many steps back. long term dependencies become unreliable. 
+    + Exploding Gradient. When the gradient becomes to large usually because having take a bad step and stuck in a bad parameter configuration: $\theta^{new}=\theta^{old}-\alpha \nabla J(\theta)$
          
 
 
