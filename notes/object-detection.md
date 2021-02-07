@@ -74,8 +74,15 @@
         * Pre-train a CNN network on image classification task.
         * Split an image into S×S cells. If an object’s center falls into a cell, that cell is “responsible” for detecting the existence of that object. Each cell predicts:
             * the location of B bounding boxes within the area covered by the cell, $(x,y,w,h)$. When the cell is 'responsible' for an object, this set of coordinates positions will be penalized if they are off compared to ground truth bounding boxes ; if the cell is not 'responsible', then their prediction of bounding box positions are unconstrained. 
-            * a confidence score, 
-            * a probability of object class conditioned on the existence of an object in the bounding box.
-            -  
+            * a confidence score, Pr(containing an object) x IoU(pred, truth); where Pr = probability and IoU = interaction under union. Only cells responsible for objects confidence scores are captured in loss function and those errors are penalized 
+            * a probability of object class conditioned on the existence of an object in the bounding box. Probability of this object belonging to every class Ci,i=1,…,K: Pr(the object belongs to the class C_i | containing an object). Only one set of class probabilities will be predicted, regardless of  bounding boxes B.  
+            * one image contains S×S×B bounding boxes, 4 coordinates, 1 confidence score and K conditional probabilities, the total prediction values for one image  is S×S×(5B+K).
+        * The loss consists of two parts, the localization loss for bounding box offset prediction and the classification loss for conditional class probabilities. Most of loss are calculated in the cell and bounding boxes that contain an object. And those indicators can be calculated from ground truth from train set 
+        ![Yolo-loss](/Users/qxy001/Documents/personal_src/aiml/notes/Yolo-loss.png)
+        ![Yolo-loss-2](/Users/qxy001/Documents/personal_src/aiml/notes/Yolo-loss-2.png)
 
 
+TODO:
+- Understand RoIAlignment layer better 
+- Understand Anchor Box / Regional Proposal Network Layer Better 
+- 

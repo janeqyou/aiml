@@ -314,12 +314,13 @@ In the output volume, the d-th depth slice (of size W2×H2) is the result of per
             <p style="text-align: center;">$G_{x}=[-1,0,1]*[x-1,x,x+1]$,$G_{y}=[-1,0,1]*[y-1,y,y+1]$</p>
         + Magnitue of the gradients: $\sqrt{(g_x)^2+(g_y)^2}$
         + Direction of the gradients: $arctan(\frac{g_x}{g_y})$
-
     - Histogram of Gradient (HOG):
         + Preprocessing the image, substracting mean and divide the std
         + Calculate gradient at each (x,y)
         + Divide the image into 8x8 cells.
-* Mask R-CNN, fast R-CNN, faster R-CNN, YoloV4 ()
+    
+* [Mask R-CNN, fast R-CNN, faster R-CNN, Yolo and beyond](/Users/qxy001/Documents/personal_src/aiml/notes/object-detection.md) 
+
 
 
 * Fine tuning, few shot learning, meta learning - DRAGON
