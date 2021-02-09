@@ -85,4 +85,3 @@
 TODO:
 - Understand RoIAlignment layer better 
 - Understand Anchor Box / Regional Proposal Network Layer Better 
-- 

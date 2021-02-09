@@ -217,7 +217,12 @@
         * <code>timeit [W.dot(wordvectors_list[i]) for i in range(N)]</code>
         * <code>timeit W.dot(wordvectors_one_matrix)</code>. Much faster, especially implement in GPUs 
     + ![Activation](/Users/qxy001/Documents/personal_src/aiml/notes/activations-2.png)
-    + 
+    + Optimizer:
+        * usually plain *SGD* will do good. For more complex nets and situations, or just to avoid worry, you often do better with
+        one of a family of more sophisticated “adaptive” optimizers that scale the parameter adjustment by an accumulated gradient: *Adam, RMSProp, Momentum etc*
+        * Handing tuning learning rate: 
+            - allowing learning rates to decrease as you train. e.g. half the learning rate every K epchos or by formular $lr=lr_{0}e^{-kt}$
+            - some other fancy learning rate 
 
 #### Common [Evaluation Metrics](https://cs230.stanford.edu/section/7/) in ML/DL
 * Object detection:

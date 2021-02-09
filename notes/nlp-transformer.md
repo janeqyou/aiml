@@ -54,14 +54,27 @@ is:
 <p style="text-align: center;">$\frac{\partial J^{(i)}{(\theta)}}{\partial h^{(j)}}=\frac{\partial J^{(i)}{(\theta)}}{\partial h^{(i)}}\prod_{(j<t<i)}W_t=\frac{\partial J^{(i)}{(\theta)}}{\partial h^{(i)}}W^{l}$</p>
 When $W^l$ is really small, this term almost becomes zero, gradient vanishes. loss at step $i$ can not influence many steps back. long term dependencies become unreliable. 
     + Exploding Gradient. When the gradient becomes to large usually because having take a bad step and stuck in a bad parameter configuration: $\theta^{new}=\theta^{old}-\alpha \nabla J(\theta)$
+
+- Bi directional RNN 
+![bi directional RNN intuition](/Users/qxy001/Documents/personal_src/aiml/notes/bidirectional-rnn-intuition.png)
+
+    * on time step t, $\overrightarrow{h^{(t)}}=\underset{FW}RNN(\overrightarrow{h^{(t-1)},x^{(t)}})$, $\overleftarrow{h^{(t)}}=\underset{BW}RNN(\overleftarrow{h^{(t+1)},x^{(t)}})$, $h^{(t)}=[\overrightarrow{h^{(t)}}, \overleftarrow{h^{(t)}}]$
+    * Bidirectional RNNs are only applicable if you have access to the entire input sequence.They are not applicable to Language Modeling, because in LM you only have left context available.
+    *  BERT (Bidirectional Encoder Representations from Transformers) is a
+powerful pretrained contextual representation system built on bidirectionality
+    * Use bidirectionality when possible 
          
+- Multi-layer RNN
+    + Multiple RNN can be stacked together to allows the network to compute more complex representations. The lower RNNs should compute lower-level features and the higher RNNs should compute higher-level features.
+    + The hidden states from RNN layer i are the inputs to RNN layer i+1
+    + High performing RNN are usually multi layer. Machine Translation usually has 2-4 layers RNN for encoding and 4 layers for decoding. *Transformer* can have up to 12-24 layers. 
+    + Vanishing gradient in "deep" RNNs can be alleviated by  adding "skip connections"
+    
+- [GloVe embedding](https://jonathan-hui.medium.com/nlp-word-embedding-glove-5e7f523999f6) 
+    + Global vectors for word representation. It is an unsupervised learning algorithm developed by Stanford for generating word embeddings by aggregating global word-word co-occurrence matrix from a corpus.
 
+- [Universal Sentence Encoding](https://amitness.com/2020/06/universal-sentence-encoder/) 
 
-
-
-
-
-
-
-
-### Transformer Stack
+### Attention
+### Transformer
+### BERT
