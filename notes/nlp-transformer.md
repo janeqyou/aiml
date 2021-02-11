@@ -94,6 +94,19 @@ powerful pretrained contextual representation system built on bidirectionality
         <p style="text-align: center;">$J=\sum_{i,j=1}^{V}f(X_{ij})((w_i)^T\hat{w}_k)+b_i+\hat(b)_j-log(X_{ij}))^2$</p> and $f(x)$ is a weight factor such that if word occurrances are less than max, the weight is less than 1, and can be parameterized 
 
 - [Universal Sentence Encoding](https://amitness.com/2020/06/universal-sentence-encoder/) 
+    + Goal is to learn a model that can map a sentence to a fixed-length vector representation
+    + Short comings of averaging word embeddings are loss of information and loss or order 
+    + The idea is to design an encoder that summarizes any given sentence to a 512-dimensional sentence embedding. We use this same embedding to solve multiple tasks and based on the mistakes it makes on those, we update the sentence embedding 
+    + Two variants of underlying neural network architectures:
+        * Transformer Encoder 
+    ![use-transformer](/Users/qxy001/Documents/personal_src/aiml/notes/use-transformer.png)   
+        * Deep Averaging Network 
+    ![use-dan](/Users/qxy001/Documents/personal_src/aiml/notes/use-dan.png)
+    + Three tasks to pretrain USE
+        * Modified skip-thought prediction 
+        * Conversational Input-Reponse Prediction 
+        * Natural Language Preference 
+
 
 ### Attention
 ### Transformer
