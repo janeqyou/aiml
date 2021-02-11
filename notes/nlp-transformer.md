@@ -16,6 +16,13 @@ that appear nearby (within a fixed-size window).
         and $P(w_{t+j}|w_{t})=\frac{exp(w_{t+j}^T\cdot w_{t})}{\sum_{u \in V}exp(u^T \cdot w_{t})}$
         + $\theta$ represents all the model parameters, in one long vector 
         with d-dimensional vectors and V-many words. The dimension of $\theta$ is $R^2dV$. Can use stochastic gradient descent by moving windows through text to maximize the likelihood
+    ![skip gram visual](/Users/qxy001/Documents/personal_src/aiml/notes/skip-gram-visual.png)
+
+    + (TODO) Noise Contrastive Estimation 
+    + (TODO) Negative sampling s
+- CBOW (contextual bag of words)
+![cbow](/Users/qxy001/Documents/personal_src/aiml/notes/cbow-visual.png)
+
 - Neural Dependency Parsing: Google probably has the best - [SyntaxNet](https://ai.googleblog.com/2016/05/announcing-syntaxnet-worlds-most.html)
 - Language Models
     + What is a language model: a system assigns probability to a piece of text. For example we have some text $x^{(1)},x^{(2)},...,x^{(t)}$, then the probability of this text by LM is: $P(x^(1),x^(2),...,x^(t)) = P(x^(1))xP(x^(2)|x^(1))x...P(x^(T)|x^(T-1),x^(T-2),x^(T-3),...x^(1)) = \prod_{t=1}^{T}P(x^(t)|x^(t-1),x^(t-2),x^(t-3),...x^(1))$
@@ -72,6 +79,19 @@ powerful pretrained contextual representation system built on bidirectionality
     
 - [GloVe embedding](https://jonathan-hui.medium.com/nlp-word-embedding-glove-5e7f523999f6) 
     + Global vectors for word representation. It is an unsupervised learning algorithm developed by Stanford for generating word embeddings by aggregating global word-word co-occurrence matrix from a corpus.
+    + Define a few terms: 
+        <p style="text-align: center;">$X_{ij}$ tabulate the number of word j occuring in context of word i;</p>
+        <p style="text-align: center;">$X_{i}=\sum_{k}X_{ik}$ occurrence of word i marginalize over all other words</p>
+        <p style="text-align: center;">$P_{ij}=P(j|i)=X_{ij}/X_{i}$ occurrence of word i marginalize over all other words</p>
+        <p style="text-align: center;">$F(w_i,w_j,\hat{w}_k)=\frac{P_{ij}}{P_{ik}}$ $w_i$ and $w_j$ are word vectors, $\hat{w}_k$ is the prob word.This formulation specifies the ratio between <i,j> and <i,k></p>
+    To enforce 1) linearity 2) symmetry 
+        <p style="text-align: center;">$F((w_i-w_j)^T,\hat{w}_k)=\frac{P_{ij}}{P_{ik}}$ and $F((w_i-w_j)^T,\hat{w}_k)=\frac{F((w_i)^T\hat{w}_k)}{F((w_i)^T(w_j)}$
+    Therefore, $F((w_i)^T\hat{w}_k))=P_{ik}=\frac{X_{ik}}{X_i}$ and we can choose $F(x)=exp(x)$ as functional form, and 
+        <p style="text-align: center;">$((w_i)^T\hat{w}_k)=log(P_{ik})=log(X_{ik})-log(X_i)$</p>
+    and move around a few terms and absorb $log(X_i)$, we arrive at 
+        <p style="text-align: center;">$((w_i)^T\hat{w}_k)+b_i+\hat(b)_k=log(X_{ik})$</p>
+    Glove is designed to enfoce word vector dot products:
+        <p style="text-align: center;">$J=\sum_{i,j=1}^{V}f(X_{ij})((w_i)^T\hat{w}_k)+b_i+\hat(b)_j-log(X_{ij}))^2$</p> and $f(x)$ is a weight factor such that if word occurrances are less than max, the weight is less than 1, and can be parameterized 
 
 - [Universal Sentence Encoding](https://amitness.com/2020/06/universal-sentence-encoder/) 
 
