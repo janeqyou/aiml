@@ -103,11 +103,18 @@ powerful pretrained contextual representation system built on bidirectionality
         * Deep Averaging Network 
     ![use-dan](/Users/qxy001/Documents/personal_src/aiml/notes/use-dan.png)
     + Three tasks to pretrain USE
-        * Modified skip-thought prediction 
-        * Conversational Input-Reponse Prediction 
-        * Natural Language Preference 
+    
+        * Modified skip-thought prediction. Using only an encoder based on transformer or DAN to predict the previous sentence and next sentence using current sentence. Data source is Wikipedia. 
+        ![use-skip-thoughts](/Users/qxy001/Documents/personal_src/aiml/notes/use-skip-thought.png)  
 
 
-### Attention
+        * Conversational Input-Response Prediction. predict the correct response for a given input among a list of correct responses and other randomly sampled responses. 
+        ![use-input-response.png](/Users/qxy001/Documents/personal_src/aiml/notes/use-input-response.png)
+        
+        * Natural Language Inference. Need to predict if a hypothesis entails, contradicts, or is neutral to a premise.The authors used the 570K sentence pairs from SNLI corpus to train USE on this task.
+        ![use-language-inference](/Users/qxy001/Documents/personal_src/aiml/notes/use-language-inference.png)
+### [Attention](https://lilianweng.github.io/lil-log/2018/06/24/attention-attention.html)
+
 ### Transformer
+
 ### BERT
